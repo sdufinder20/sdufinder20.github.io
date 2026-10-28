@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Moderation | SDU Lost & Found Portal</title>
+  <meta name="description" content="SDU Campus Lost & Found administrative moderation and platform analytics.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body>
+
+  <!-- Sticky Header -->
+  <header class="sdu-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-link">
+        <img src="assets/images/logo.png" alt="Southern Delta University Logo" class="brand-logo">
+        <div class="brand-text">
+          <span class="brand-title">Southern Delta University</span>
+          <span class="brand-tagline">Campus Lost & Found Portal</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li class="nav-item"><a href="index.html">Browse Items</a></li>
+          <li class="nav-item"><a href="report.html">Report an Item</a></li>
+          <li class="nav-item"><a href="dashboard.html">My Dashboard</a></li>
+          <li class="nav-item active"><a href="admin.html">Admin</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="report.html" class="btn btn-primary btn-sm">+ Report Item</a>
+        <button class="mobile-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Admin Header -->
+    <section class="dashboard-header">
+      <div class="dash-welcome">
+        <div>
+          <div class="hero-pill" style="margin-bottom: 8px; background: #fef3c7; color: #b45309; border-color: #fde68a;">
+            <span>🛡️ Campus Security & Moderation Desk</span>
+          </div>
+          <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">
+            Platform Moderation & Analytics
+          </h1>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Real-time analytics and direct moderation controls for all lost & found reports across Southern Delta University.
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <button id="adminRefreshBtn" class="btn btn-outline btn-sm" onclick="loadAdminData();">
+            🔄 Refresh Data
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Metrics Grid -->
+    <section class="dash-stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrap stat-icon-blue">📦</div>
+        <div class="stat-info">
+          <h3 id="adminTotalCount">0</h3>
+          <p>Total Reported</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrap stat-icon-red">❓</div>
+        <div class="stat-info">
+          <h3 id="adminLostCount">0</h3>
+          <p>Active Lost Items</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrap stat-icon-green">🔍</div>
+        <div class="stat-info">
+          <h3 id="adminFoundCount">0</h3>
+          <p>Active Found Items</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrap stat-icon-purple">🤝</div>
+        <div class="stat-info">
+          <h3 id="adminRecoveredCount">0</h3>
+          <p>Total Reunited</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrap" style="background: #e0f2fe; color: #0284c7;">📈</div>
+        <div class="stat-info">
+          <h3 id="adminRateCount">0%</h3>
+          <p>Recovery Rate</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Moderation Table Section -->
+    <section class="dash-table-card" style="margin-top: 24px;">
+      <div class="dash-table-header">
+        <div>
+          <h2 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main);">All Campus Item Listings</h2>
+          <span style="font-size: 0.84rem; color: var(--text-muted);">Review student reports, mark items resolved, or delete spam/inappropriate content</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <input type="text" id="adminSearchInput" placeholder="Filter listings..." class="form-control" style="font-size: 0.85rem; padding: 6px 12px; width: 220px;">
+        </div>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="custom-table" id="adminTable">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Type</th>
+              <th>Category</th>
+              <th>Location</th>
+              <th>Reporter</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th style="text-align: right;">Moderation Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody">
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 30px; color: var(--text-muted);">
+                Loading campus listings...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAdminData();
+    });
+
+    async function loadAdminData() {
+      const API_BASE = window.API_BASE || (window.location.origin.includes('5000') ? '/api' : 'http://localhost:5000/api');
+      try {
+        // Fetch stats
+        const statsRes = await fetch(`${API_BASE}/stats`);
+        const statsData = await statsRes.json();
+        if (statsData.success) {
+          const s = statsData.data;
+          document.getElementById('adminTotalCount').textContent = s.totalItems;
+          document.getElementById('adminLostCount').textContent = s.activeLost;
+          document.getElementById('adminFoundCount').textContent = s.activeFound;
+          document.getElementById('adminRecoveredCount').textContent = s.totalRecovered;
+          document.getElementById('adminRateCount').textContent = `${s.recoveryRate}%`;
+        }
+
+        // Fetch items
+        const itemsRes = await fetch(`${API_BASE}/items`);
+        const itemsData = await itemsRes.json();
+        if (itemsData.success) {
+          renderAdminTable(itemsData.data);
+        }
+      } catch (err) {
+        console.error('Error loading admin data:', err);
+      }
+    }
+
+    function renderAdminTable(items) {
+      const tbody = document.getElementById('adminTableBody');
+      if (!items || items.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 30px; color: var(--text-muted);">No items recorded on campus yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = items.map(item => {
+        const isFound = item.type === 'Found';
+        const isRecovered = item.status === 'Recovered';
+        const typeBadge = isFound ? '<span class="badge badge-found">Found</span>' : '<span class="badge badge-lost">Lost</span>';
+        const statusBadge = isRecovered
+          ? '<span class="badge badge-reunited">✓ Reunited</span>'
+          : `<span class="badge ${isFound ? 'badge-found' : 'badge-lost'}">● Active</span>`;
+
+        const dateStr = item.date ? new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+
+        return `
+          <tr data-id="${item._id}" data-search="${(item.title + ' ' + item.location + ' ' + item.contactName).toLowerCase()}">
+            <td>
+              <div class="table-item-cell">
+                <div style="font-weight: 700; color: var(--text-main); font-size: 0.92rem;">
+                  <a href="item.html?id=${item._id}" style="color: var(--sdu-blue-primary); text-decoration: underline;">
+                    ${item.title}
+                  </a>
+                </div>
+              </div>
+            </td>
+            <td>${typeBadge}</td>
+            <td><span style="font-size: 0.85rem; color: var(--text-muted);">${item.category}</span></td>
+            <td><span style="font-size: 0.85rem;">${item.location}</span></td>
+            <td>
+              <div style="font-size: 0.85rem;">
+                <strong>${item.contactName}</strong><br>
+                <span style="color: var(--text-muted); font-size: 0.78rem;">${item.contactEmail}</span>
+              </div>
+            </td>
+            <td style="font-size: 0.85rem; color: var(--text-muted);">${dateStr}</td>
+            <td>${statusBadge}</td>
+            <td style="text-align: right;">
+              <div style="display: flex; gap: 6px; justify-content: flex-end;">
+                <button class="btn btn-outline btn-sm" onclick="toggleItemStatus('${item._id}', '${isRecovered ? 'Active' : 'Recovered'}')" title="Toggle resolution status">
+                  ${isRecovered ? 'Mark Active' : 'Mark Reunited'}
+                </button>
+                <button class="btn btn-sm" style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5;" onclick="deleteAdminItem('${item._id}')" title="Delete report">
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Setup live table filter
+      const searchInput = document.getElementById('adminSearchInput');
+      if (searchInput) {
+        searchInput.oninput = () => {
+          const q = searchInput.value.toLowerCase().trim();
+          document.querySelectorAll('#adminTableBody tr').forEach(row => {
+            const rowText = row.getAttribute('data-search') || '';
+            row.style.display = (!q || rowText.includes(q)) ? '' : 'none';
+          });
+        };
+      }
+    }
+
+    async function toggleItemStatus(id, newStatus) {
+      const API_BASE = window.API_BASE || (window.location.origin.includes('5000') ? '/api' : 'http://localhost:5000/api');
+      try {
+        const res = await fetch(`${API_BASE}/items/${id}/status`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          loadAdminData();
+        } else {
+          alert(data.message || 'Error updating status');
+        }
+      } catch (err) {
+        console.error('Error toggling status:', err);
+      }
+    }
+
+    async function deleteAdminItem(id) {
+      if (!confirm('Are you sure you want to permanently delete this report? This cannot be undone.')) return;
+      const API_BASE = window.API_BASE || (window.location.origin.includes('5000') ? '/api' : 'http://localhost:5000/api');
+      try {
+        const res = await fetch(`${API_BASE}/items/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          loadAdminData();
+        } else {
+          alert(data.message || 'Error deleting item');
+        }
+      } catch (err) {
+        console.error('Error deleting item:', err);
+      }
+    }
+  </script>
+</body>
+</html>

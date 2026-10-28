@@ -1,0 +1,18 @@
+{
+  "name": "sdu-lost-and-found-portal",
+  "version": "1.0.0",
+  "description": "Southern Delta University Lost & Found Portal",
+  "scripts": {
+    "start": "npm start --prefix Backend",
+    "dev": "npm run dev --prefix Backend",
+    "seed": "npm run seed --prefix Backend",
+    "test": "node Backend/test_api.js"
+  },
+  "keywords": [
+    "sdu",
+    "lost-and-found",
+    "university"
+  ],
+  "author": "",
+  "license": "ISC"
+}

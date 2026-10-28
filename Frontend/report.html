@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report an Item | SDU Lost & Found Portal</title>
+  <meta name="description" content="Report a lost or found item on Southern Delta University, Ozoro campus. Help connect belongings with their rightful owners.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body>
+
+
+  <!-- Sticky Header -->
+  <header class="sdu-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-link">
+        <img src="assets/images/logo.png" alt="Southern Delta University Logo" class="brand-logo">
+        <div class="brand-text">
+          <span class="brand-title">Southern Delta University</span>
+          <span class="brand-tagline">Campus Lost & Found Portal</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li class="nav-item"><a href="index.html">Browse Items</a></li>
+          <li class="nav-item active"><a href="report.html">Report an Item</a></li>
+          <li class="nav-item"><a href="dashboard.html">My Dashboard</a></li>
+          <li class="nav-item"><a href="admin.html">Admin</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="dashboard.html" class="btn btn-outline btn-sm">My Dashboard</a>
+        <button class="mobile-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="container">
+    <div class="form-page-container">
+
+      <!-- Form Page Intro -->
+      <div class="form-header-card">
+        <div class="hero-pill" style="background: var(--sdu-blue-light); color: var(--sdu-blue-primary); border-color: var(--sdu-blue-primary);">
+          <span>📝 Campus Recovery Form</span>
+        </div>
+        <h1>Report a Lost or Found Belonging</h1>
+        <p>Fill out this simple form to alert the SDU campus community. Clear descriptions and accurate locations help reunite items faster.</p>
+      </div>
+
+      <!-- Submission Form Card -->
+      <div class="form-card">
+        <form id="reportItemForm">
+
+          <!-- Type Selector: Lost vs Found -->
+          <div class="form-group">
+            <label class="form-label">Report Type <span class="req">*</span></label>
+            <input type="hidden" id="itemTypeInput" value="Lost">
+            <div class="report-type-selector">
+              <div class="type-radio-card active-lost" data-type="Lost">
+                <div class="radio-indicator"></div>
+                <div>
+                  <h4 style="font-size: 1rem; font-weight: 700; color: var(--lost-color);">I Lost an Item</h4>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Report something you misplaced on campus</p>
+                </div>
+              </div>
+
+              <div class="type-radio-card" data-type="Found">
+                <div class="radio-indicator"></div>
+                <div>
+                  <h4 style="font-size: 1rem; font-weight: 700; color: var(--found-color);">I Found an Item</h4>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Report an item you picked up or placed in safe custody</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item General Information -->
+          <div class="form-grid">
+            <div class="form-group form-grid-full">
+              <label class="form-label" for="itemTitle">Item Name / Title <span class="req">*</span></label>
+              <input type="text" id="itemTitle" class="form-control" placeholder="e.g. SDU Student Identity Card, Casio Calculator FX-991EX, Black Dell Charger" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="itemCategory">Category <span class="req">*</span></label>
+              <select id="itemCategory" class="form-control" required>
+                <option value="">Select a category...</option>
+                <option value="ID Cards">ID Cards & Credentials</option>
+                <option value="Electronics">Electronics & Gadgets</option>
+                <option value="Keys">Keys & Padlocks</option>
+                <option value="Books">Textbooks & Lecture Notes</option>
+                <option value="Clothing">Clothing, Bags & Eyewear</option>
+                <option value="Wallets">Wallets & Purses</option>
+                <option value="Other">Other Miscellaneous Item</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="itemDate">Date Lost / Found <span class="req">*</span></label>
+              <input type="date" id="itemDate" class="form-control" required>
+            </div>
+
+            <div class="form-group form-grid-full">
+              <label class="form-label" for="itemLocation">Campus Location <span class="req">*</span></label>
+              <select id="itemLocation" class="form-control" required>
+                <option value="">Select where this happened on SDU campus...</option>
+                <option value="Main University Library">Main University Library</option>
+                <option value="Faculty of Engineering Complex">Faculty of Engineering Complex</option>
+                <option value="Faculty of Science & Laboratories">Faculty of Science & Laboratories</option>
+                <option value="Faculty of Management Sciences">Faculty of Management Sciences</option>
+                <option value="Faculty of Environmental Studies">Faculty of Environmental Studies</option>
+                <option value="Male Student Hostel Block">Male Student Hostel Block</option>
+                <option value="Female Student Hostel Block">Female Student Hostel Block</option>
+                <option value="University Main Auditorium">University Main Auditorium</option>
+                <option value="Campus Central Cafeteria">Campus Central Cafeteria</option>
+                <option value="Ozoro Sports Arena / Pitch">Ozoro Sports Arena / Pitch</option>
+                <option value="Administrative Block / Senate Building">Administrative Block / Senate Building</option>
+                <option value="Main Security Gate">Main Security Gate</option>
+              </select>
+            </div>
+
+            <div class="form-group form-grid-full">
+              <label class="form-label" for="itemDesc">Detailed Description & Distinguishing Features <span class="req">*</span></label>
+              <textarea id="itemDesc" class="form-control" placeholder="Mention color, brand, condition, serial code (or state if covered), any stickers, scratches, or exact spot where it was left..." required></textarea>
+            </div>
+          </div>
+
+          <!-- Image Upload Dropzone -->
+          <div class="form-group">
+            <label class="form-label">Upload Item Photo (Optional, Highly Recommended)</label>
+            <div class="upload-dropzone" id="uploadDropzone">
+              <div class="upload-icon">📷</div>
+              <div class="upload-text">Click or drag & drop an image here</div>
+              <div class="upload-hint">Supports JPG, PNG or WEBP (Max 5MB)</div>
+              <input type="file" id="imageUploadInput" accept="image/*" style="display: none;">
+            </div>
+
+            <div class="preview-container" id="previewContainer">
+              <img id="previewImage" src="" alt="Selected Item Preview" style="width: 100%; height: 160px; object-fit: cover;">
+            </div>
+          </div>
+
+          <!-- Reporter Contact Information -->
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin: 28px 0 16px 0; padding-top: 18px; border-top: 1px solid var(--border-subtle); color: var(--sdu-blue-primary);">
+            Your Contact & Verification Details
+          </h3>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="reporterName">Full Name <span class="req">*</span></label>
+              <input type="text" id="reporterName" class="form-control" placeholder="e.g. Chidera Emmanuel" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="reporterMatric">SDU Matric / Staff ID <span class="req">*</span></label>
+              <input type="text" id="reporterMatric" class="form-control" placeholder="e.g. SDU/2022/3105" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="reporterEmail">SDU Email Address <span class="req">*</span></label>
+              <input type="email" id="reporterEmail" class="form-control" placeholder="chidera.emmanuel@sdu.edu.ng" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="reporterPhone">Phone / WhatsApp Number <span class="req">*</span></label>
+              <input type="tel" id="reporterPhone" class="form-control" placeholder="+234 812 345 6789" required>
+            </div>
+          </div>
+
+          <!-- Submit Buttons -->
+          <div style="display: flex; gap: 16px; margin-top: 24px;">
+            <a href="index.html" class="btn btn-outline" style="flex: 1;">Cancel</a>
+            <button type="submit" class="btn btn-primary btn-lg" style="flex: 2;">
+              Publish Report to SDU Portal
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Success Confirmation Modal -->
+  <div class="modal-backdrop" id="submissionSuccessModal">
+    <div class="modal-box" style="text-align: center;">
+      <div style="width: 60px; height: 60px; border-radius: 50%; background: var(--found-bg); color: var(--found-color); font-size: 2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+        ✓
+      </div>
+      <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">Report Successfully Published!</h2>
+      <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 18px;">
+        Your listing has been posted to the Southern Delta University campus feed. Your generated Tracking Reference is:
+      </p>
+      <div style="background: var(--sdu-blue-light); padding: 10px; border-radius: var(--radius-sm); font-family: monospace; font-size: 1.1rem; font-weight: 700; color: var(--sdu-blue-primary); margin-bottom: 24px;">
+        #SDU-2026-109
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <a href="dashboard.html" class="btn btn-outline" style="flex: 1;">Go to My Dashboard</a>
+        <a href="index.html" class="btn btn-primary" style="flex: 1;">View on Campus Feed</a>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="js/app.js"></script>
+</body>
+</html>

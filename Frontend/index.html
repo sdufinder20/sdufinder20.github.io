@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SDU Lost & Found Portal | Southern Delta University, Ozoro</title>
+  <meta name="description"
+    content="Official Lost and Found Portal for Southern Delta University, Ozoro. Report lost belongings or help reunite found items with their owners across campus.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+
+<body>
+
+
+  <!-- Main Sticky Header -->
+  <header class="sdu-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-link">
+        <img src="assets/images/logo.png" alt="Southern Delta University Logo" class="brand-logo">
+        <div class="brand-text">
+          <span class="brand-title">Southern Delta University</span>
+          <span class="brand-tagline">Campus Lost & Found Portal</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li class="nav-item active"><a href="index.html">Browse Items</a></li>
+          <li class="nav-item"><a href="report.html">Report an Item</a></li>
+          <li class="nav-item"><a href="dashboard.html">My Dashboard</a></li>
+          <li class="nav-item"><a href="admin.html">Admin</a></li>
+        </ul>
+      </nav>
+
+      <!-- Header Action -->
+      <div class="nav-actions">
+        <a href="report.html" class="btn btn-primary btn-sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Report Item
+        </a>
+        <button class="mobile-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="sdu-hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-pill">
+            <span>🛡️ Official SDU Student & Staff Utility</span>
+          </div>
+          <h1 class="hero-title">Lost Something on Campus? Let's Find It Together.</h1>
+          <p class="hero-subtitle">The centralized hub for recovering lost items and returning found belongings across
+            all faculties, lecture theaters, and hostels at Southern Delta University, Ozoro.</p>
+
+          <!-- Search Bar -->
+          <div class="hero-search-box">
+            <div class="search-input-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="itemSearchInput"
+                placeholder="Search by item name, ID number, or campus hall (e.g., 'Calculator', 'Library', 'Charger')...">
+            </div>
+            <button class="btn btn-primary"
+              onclick="document.getElementById('itemSearchInput').focus();">Search</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filter & Sort Bar -->
+    <section class="filter-section">
+      <div class="container">
+        <div class="filter-bar">
+          <!-- Type Filter Pills -->
+          <div class="type-pills">
+            <button class="type-pill active" data-type="all">All Items</button>
+            <button class="type-pill" data-type="Lost">Lost Items</button>
+            <button class="type-pill" data-type="Found">Found Items</button>
+          </div>
+
+          <!-- Dropdown Filters -->
+          <div class="dropdown-filters">
+            <select class="select-filter" id="categoryFilter" aria-label="Filter by Category">
+              <option value="all">All Categories</option>
+              <option value="ID Cards">ID Cards & Credentials</option>
+              <option value="Electronics">Electronics & Gadgets</option>
+              <option value="Keys">Keys & Keychains</option>
+              <option value="Books">Books & Notebooks</option>
+              <option value="Clothing">Clothing & Bags</option>
+              <option value="Other">Other Items</option>
+            </select>
+
+            <select class="select-filter" id="locationFilter" aria-label="Filter by Campus Location">
+              <option value="all">All SDU Locations</option>
+              <option value="Library">Main University Library</option>
+              <option value="Engineering">Faculty of Engineering</option>
+              <option value="Science">Faculty of Science</option>
+              <option value="Management">Faculty of Management Sciences</option>
+              <option value="Hostel">Student Hostels</option>
+              <option value="Auditorium">University Auditorium</option>
+              <option value="Cafeteria">Campus Cafeteria</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Item Feed / Cards Grid -->
+    <section class="items-grid-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Recent Campus Listings</h2>
+          <span class="item-count-text" id="itemsCountText">Loading items...</span>
+        </div>
+
+        <div class="items-grid" id="itemsGrid">
+          <div class="loading-state" style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; color: var(--text-muted);">
+            <div style="font-size: 2rem; margin-bottom: 8px;">⏳</div>
+            <p style="font-weight: 500;">Loading campus listings from MongoDB...</p>
+          </div>
+        </div>
+
+        <!-- No results placeholder (Hidden by default) -->
+        <div id="noResultsMessage" style="display: none; text-align: center; padding: 60px 20px;">
+          <div style="font-size: 3rem; margin-bottom: 12px;">🔍</div>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main);">No matching items found</h3>
+          <p style="color: var(--text-muted); margin-top: 6px;">Try clearing your filters or search keywords, or report
+            this item if you lost/found it.</p>
+          <a href="report.html" class="btn btn-primary" style="margin-top: 18px;">+ Report New Item</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <script src="js/app.js"></script>
+</body>
+
+</html>

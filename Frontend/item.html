@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Item Details | SDU Lost & Found Portal</title>
+  <meta name="description" content="Detailed report and claim information for items reported on Southern Delta University, Ozoro campus.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body>
+
+
+  <!-- Sticky Header -->
+  <header class="sdu-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-link">
+        <img src="assets/images/logo.png" alt="Southern Delta University Logo" class="brand-logo">
+        <div class="brand-text">
+          <span class="brand-title">Southern Delta University</span>
+          <span class="brand-tagline">Campus Lost & Found Portal</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li class="nav-item"><a href="index.html">Browse Items</a></li>
+          <li class="nav-item"><a href="report.html">Report an Item</a></li>
+          <li class="nav-item"><a href="dashboard.html">My Dashboard</a></li>
+          <li class="nav-item"><a href="admin.html">Admin</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="report.html" class="btn btn-primary btn-sm">+ Report Item</a>
+        <button class="mobile-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Breadcrumb trail -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span>/</span>
+      <a href="index.html" id="breadcrumbCategory">Category</a>
+      <span>/</span>
+      <span style="color: var(--text-main); font-weight: 600;" id="breadcrumbTitle">Item Details</span>
+    </nav>
+
+    <!-- Details 2-Column Section -->
+    <section class="details-wrapper" id="detailsWrapper">
+
+      <!-- Left: Item Showcase & Information -->
+      <article class="details-card">
+        <div class="details-gallery" id="itemGalleryContainer">
+          <div style="height: 280px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; color: #94a3b8; border-radius: var(--radius-md); font-size: 3rem;">
+            📦
+          </div>
+        </div>
+
+        <div class="details-header">
+          <div>
+            <div style="margin-bottom: 8px; display: flex; gap: 8px; align-items: center;" id="itemBadges">
+              <span class="badge badge-category">Loading...</span>
+            </div>
+            <h1 class="details-title" id="itemTitle">Loading Item Details...</h1>
+          </div>
+        </div>
+
+        <!-- Metadata Quick Grid -->
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Campus Location</span>
+            <span class="info-value" id="itemLocation">Loading...</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Date Discovered / Reported</span>
+            <span class="info-value" id="itemDate">Loading...</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Category</span>
+            <span class="info-value" id="itemCategory">Loading...</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Current Status</span>
+            <span class="info-value" id="itemStatus">● Active</span>
+          </div>
+        </div>
+
+        <!-- Item Full Description -->
+        <div class="details-description">
+          <h2 class="details-desc-title">Description & Condition Notes</h2>
+          <p class="details-desc-text" id="itemDescription">
+            Loading report notes from database...
+          </p>
+        </div>
+
+        <!-- Verification Checklist -->
+        <div style="margin-top: 28px; padding: 20px; background: var(--sdu-blue-light); border-radius: var(--radius-md); border-left: 4px solid var(--sdu-blue-primary);">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--sdu-blue-dark); margin-bottom: 6px;">How to Claim this Belonging</h3>
+          <p style="font-size: 0.88rem; color: var(--sdu-blue-deep); line-height: 1.5;">
+            To prevent false claims, you will be requested to state distinguishing markings, serial numbers, or identifying details when collecting the item.
+          </p>
+        </div>
+      </article>
+
+      <!-- Right: Finder Contact & Claim Action Box -->
+      <aside class="sidebar-card">
+        <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 16px;">Item Custody & Contact</h2>
+
+        <div class="contact-card-header">
+          <div class="contact-avatar" id="contactAvatar">--</div>
+          <div>
+            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main);" id="contactName">Loading reporter...</h3>
+            <span style="font-size: 0.8rem; color: var(--text-muted);" id="contactRole">SDU Student / Staff</span>
+          </div>
+        </div>
+
+        <div class="contact-info-block">
+          <div class="contact-row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--sdu-blue-primary);"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <span id="contactEmail">--</span>
+          </div>
+          <div class="contact-row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--found-color);"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <span id="contactPhone">--</span>
+          </div>
+        </div>
+
+        <!-- Primary Claim Action -->
+        <button class="btn btn-primary btn-lg" id="openClaimModalBtn" style="width: 100%; margin-bottom: 12px;">
+          ✋ This is Mine (Claim Item)
+        </button>
+
+        <a href="#" id="whatsappBtn" target="_blank" class="btn btn-outline" style="width: 100%;">
+          Chat with Reporter on WhatsApp
+        </a>
+
+        <!-- Campus Safety Guideline -->
+        <div class="safety-notice">
+          <strong>⚠️ SDU Campus Safety Tip:</strong> Always arrange physical item handovers in broad daylight in safe campus public areas (e.g., Main Security Post, Library Lawn, or Faculty HOD office).
+        </div>
+      </aside>
+
+    </section>
+  </main>
+
+  <!-- Claim Modal Popup -->
+  <div class="modal-backdrop" id="claimModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <button class="modal-close-btn" id="closeClaimModalBtn" aria-label="Close modal">✕</button>
+      <h2 id="modalTitle" style="font-size: 1.3rem; font-weight: 800; color: var(--sdu-blue-primary); margin-bottom: 8px;">Claim Verification Request</h2>
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">
+        Provide details to verify that this Casio Calculator belongs to you.
+      </p>
+
+      <form id="claimVerificationForm">
+        <div class="form-group">
+          <label class="form-label" for="claimantName">Full Name <span class="req">*</span></label>
+          <input type="text" id="claimantName" class="form-control" placeholder="e.g. Samuel Chukwuma" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="claimantMatric">Matriculation / Staff Number <span class="req">*</span></label>
+          <input type="text" id="claimantMatric" class="form-control" placeholder="e.g. SDU/2023/4921" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="claimantPhone">Phone / WhatsApp Number <span class="req">*</span></label>
+          <input type="tel" id="claimantPhone" class="form-control" placeholder="+234 800 000 0000" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="proofDescription">Proof of Ownership / Identifying Features <span class="req">*</span></label>
+          <textarea id="proofDescription" class="form-control" rows="3" placeholder="Describe specific marks, scratches, stickers, or battery compartment details that prove this item is yours..." required></textarea>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 24px;">
+          <button type="button" class="btn btn-outline" id="cancelClaimBtn" style="flex: 1;">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="flex: 2;">Submit Claim Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <script src="js/app.js"></script>
+</body>
+</html>
