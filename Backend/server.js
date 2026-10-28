@@ -49,23 +49,19 @@ app.use((err, req, res, next) => {
 
 // Connect to Database & Start Server
 const startServer = async () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 SDU Lost & Found Server running on port ${PORT}`);
+    console.log(`📡 API Endpoints available at /api/items`);
+    console.log(`📊 Stats endpoint available at /api/stats`);
+  });
+
   try {
     await connectDB();
-
-
-
-    const server = app.listen(PORT, () => {
-      console.log(`🚀 SDU Lost & Found Server running on http://localhost:${PORT}`);
-      console.log(`📡 API Endpoints available at http://localhost:${PORT}/api/items`);
-      console.log(`📊 Stats endpoint available at http://localhost:${PORT}/api/stats`);
-      console.log(`🌐 Frontend accessible at http://localhost:${PORT}/index.html`);
-    });
-
-    return server;
   } catch (error) {
-    console.error('Failed to start server:', error);
-    process.exit(1);
+    console.error('⚠️ Database connection error:', error.message);
   }
+
+  return server;
 };
 
 if (require.main === module) {
