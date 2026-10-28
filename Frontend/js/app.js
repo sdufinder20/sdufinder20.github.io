@@ -3,8 +3,8 @@
    Full Client-Side REST API Integration & UI Logic
    ========================================================================== */
 
-// Live Cloud Backend URL (e.g. Render / Railway). Update this once your backend is deployed!
-const LIVE_BACKEND_API = 'https://YOUR-BACKEND.onrender.com/api';
+// Live Cloud Backend URL (Render)
+const LIVE_BACKEND_API = 'https://sdu-lost.onrender.com/api';
 
 window.API_BASE = (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? (window.location.port === '5000' ? '/api' : 'http://localhost:5000/api')
