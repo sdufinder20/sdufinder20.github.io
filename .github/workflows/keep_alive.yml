@@ -1,0 +1,17 @@
+﻿name: Keep Render Alive 24/7
+
+on:
+  schedule:
+    # Runs every 14 minutes (Render sleeps after 15 minutes of inactivity)
+    - cron: '*/14 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping SDU Render Backend
+        run: |
+          echo "Pinging SDU Lost & Found Render backend..."
+          status_code=$(curl -s -o /dev/null -w "%{http_code}" https://sdu-lost.onrender.com/api/health)
+          echo "Render Health Status: $status_code"
