@@ -93,6 +93,27 @@ async function initIndexPage() {
   let currentType = 'all';
 
   async function loadItems() {
+    const targetUrl = `${API_BASE}/items`;
+
+    // 1. Render initial loading state
+    itemsGrid.innerHTML = `
+      <div class="loading-state" id="loadingStateIndicator" style="grid-column: 1 / -1; text-align: center; padding: 48px 20px; color: var(--text-muted);">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;" class="loading-spinner">⏳</div>
+        <p style="font-weight: 600; font-size: 1rem; color: var(--text-main);" id="loadingStatusText">Connecting to MongoDB...</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;" id="loadingSubtext">Fetching campus lost & found listings</p>
+      </div>
+    `;
+
+    // 2. Display helpful hint if server takes longer than 3.5s (e.g. Render free tier waking from sleep)
+    const wakeupTimer = setTimeout(() => {
+      const sub = document.getElementById('loadingSubtext');
+      const ind = document.getElementById('loadingStatusText');
+      if (ind) ind.textContent = '☕ Server is waking up...';
+      if (sub) {
+        sub.innerHTML = `Connecting to cloud backend.<br>Render free tier servers take ~20–30 seconds to wake up from sleep.<br><span style="font-size: 0.78rem; opacity: 0.8;">Target: ${escapeHtml(targetUrl)}</span>`;
+      }
+    }, 3500);
+
     try {
       const searchTerm = searchInput ? searchInput.value.trim() : '';
       const selectedCategory = categoryFilter ? categoryFilter.value : 'all';
@@ -104,16 +125,68 @@ async function initIndexPage() {
       if (selectedLocation !== 'all') params.append('location', selectedLocation);
       if (searchTerm) params.append('search', searchTerm);
 
-      const res = await fetch(`${API_BASE}/items?${params.toString()}`);
+      const fullUrl = `${targetUrl}?${params.toString()}`;
+      console.log(`[SDU Portal] Fetching listings from: ${fullUrl}`);
+
+      // Set 30s timeout so request does not hang forever
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+      const res = await fetch(fullUrl, { signal: controller.signal });
+      clearTimeout(timeoutId);
+      clearTimeout(wakeupTimer);
+
+      if (!res.ok) {
+        let errMessage = `Server error (HTTP ${res.status}: ${res.statusText})`;
+        try {
+          const errBody = await res.json();
+          if (errBody.message) errMessage = errBody.message;
+        } catch (_) {}
+        throw new Error(errMessage);
+      }
+
       const data = await res.json();
 
       if (data.success) {
         renderCards(data.data);
+      } else {
+        throw new Error(data.message || 'Failed to retrieve listings from server');
       }
     } catch (err) {
-      console.warn('Backend API currently unreachable, keeping static cards or retrying:', err.message);
+      clearTimeout(wakeupTimer);
+      console.error('[SDU Portal Error] Error loading items:', err);
+
+      let hint = '';
+      if (err.name === 'AbortError') {
+        hint = 'Request timed out after 30 seconds. The backend may still be starting up.';
+      } else if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        hint = 'Network connection failed. The backend server might be offline, sleeping, or blocked by CORS.';
+      } else if (err.message.includes('buffering timed out')) {
+        hint = 'MongoDB Atlas connection timed out. Check if 0.0.0.0/0 is enabled in Atlas Network Access.';
+      }
+
+      itemsGrid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 48px 24px; background: #fff; border: 1px solid #fee2e2; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); max-width: 620px; margin: 0 auto;">
+          <div style="font-size: 3rem; margin-bottom: 12px;">⚠️</div>
+          <h3 style="color: #b91c1c; font-size: 1.25rem; font-weight: 700; margin-bottom: 8px;">Unable to Load Campus Listings</h3>
+          <p style="color: var(--text-main); font-size: 0.95rem; margin-bottom: 8px;">
+            Error: <code style="font-family: monospace; color: #b91c1c; background: #fef2f2; padding: 2px 8px; border-radius: 4px;">${escapeHtml(err.message)}</code>
+          </p>
+          ${hint ? `<p style="color: #64748b; font-size: 0.88rem; margin: 10px 0 16px 0; line-height: 1.5;">💡 ${escapeHtml(hint)}</p>` : ''}
+          <div style="font-size: 0.78rem; color: #94a3b8; margin-bottom: 18px;">
+            Endpoint: <code style="color: #64748b;">${escapeHtml(targetUrl)}</code>
+          </div>
+          <button class="btn btn-primary" onclick="window.loadCampusItems();" style="display: inline-flex; align-items: center; gap: 8px;">
+            🔄 Retry Connection
+          </button>
+        </div>
+      `;
+
+      if (itemsCountText) itemsCountText.textContent = 'Connection Error';
     }
   }
+
+  window.loadCampusItems = loadItems;
 
   function renderCards(items) {
     if (!items || items.length === 0) {
@@ -523,7 +596,7 @@ function initReportForm() {
       }
     } catch (err) {
       console.error('Error submitting report:', err);
-      alert('Could not connect to backend server. Please make sure the server is running.');
+      alert(`Could not submit report to backend server.\n\nError: ${err.message}\nTarget: ${API_BASE}/items\n\nTips:\n- If using Render free tier, allow ~20-30s for the server to wake up from sleep.\n- Ensure 0.0.0.0/0 is enabled in MongoDB Atlas Network Access.`);
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -563,6 +636,17 @@ async function initDashboard() {
     }
   } catch (err) {
     console.warn('Could not fetch live dashboard data:', err.message);
+    const tbody = document.querySelector('.custom-table tbody');
+    if (tbody) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 30px 20px; color: #b91c1c;">
+            ⚠️ Could not load data from backend server: ${escapeHtml(err.message)}<br>
+            <button class="btn btn-outline btn-sm" onclick="initDashboard();" style="margin-top: 10px;">🔄 Retry</button>
+          </td>
+        </tr>
+      `;
+    }
   }
 }
 

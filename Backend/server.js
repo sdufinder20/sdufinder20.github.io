@@ -26,10 +26,16 @@ app.use(express.static(frontendPath));
 app.use('/api/items', require('./routes/items'));
 app.use('/api/stats', require('./routes/stats'));
 
+const mongoose = require('mongoose');
+
 // Health check
 app.get('/api/health', (req, res) => {
+  const stateMap = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+  const dbState = mongoose.connection.readyState;
   res.json({
     status: 'ok',
+    database: stateMap[dbState] || 'unknown',
+    databaseConnected: dbState === 1,
     timestamp: new Date().toISOString(),
     service: 'SDU Lost & Found Portal API'
   });
